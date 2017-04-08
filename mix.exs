@@ -27,6 +27,6 @@ defmodule Hermes.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [{:mariaex, "~> 0.8.2"} ]
   end
 end

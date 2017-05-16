@@ -25,6 +25,16 @@ defmodule Hermes do
         end
     end
 
+    # untested function
+    def get_password_hash_and_salt(p, username) do
+        {s, r} = Mariaex.query(p, "SELECT password_hash, salt FROM UserManagement WHERE username = ?", [username])
+        case {s, r} do
+            {:ok, _} ->
+                {:ok, r.rows, 0}
+            {:error, _} -> {:error, r.mariadb.message, 1}
+        end
+    end
+
     def create_user(p, username, email, passwordHash, salt) do
         case does_user_not_exists(p, username) do
             {:ok, _} ->

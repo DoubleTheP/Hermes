@@ -12,7 +12,7 @@ defmodule Hermes do
         {s, r} = Mariaex.query(p, "SELECT username FROM UserManagement WHERE username = ?", [username])
         case {s, r} do
             {:ok, %Mariaex.Result{num_rows: 0}} -> {:ok, p}
-            {:ok, _} -> {:error, "User already exists"}
+            {:ok, _} -> {:nix, "User already exists"}
             {:error, _} -> {:error, r.mariadb.message}
         end
     end
@@ -43,6 +43,8 @@ defmodule Hermes do
             {:ok, _} ->
                 insert_user(p, username, email, passwordHash)
                 create_user_profile(p, username)
+                {:ok, "user successfully created"}
+            {:nix, message} -> {:nix, message}
             {:error, message} -> {:error, message}
         end
     end

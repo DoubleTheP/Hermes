@@ -25,7 +25,6 @@ defmodule Hermes do
         end
     end
 
-    # untested function
     def get_user_credentials(p, username) do
         {s, r} = Mariaex.query(p, "SELECT password_hash, salt FROM UserManagement WHERE username = ?", [username])
         case {s, r} do
@@ -33,7 +32,7 @@ defmodule Hermes do
                 if r.rows == [] do
                     {:nix, "user does not exists"}
                 else
-                    {:ok, r.rows}
+                    {:ok, Enum.at(r.rows,0)}
                 end
             {:error, _} -> {:error, r.mariadb.message}
         end

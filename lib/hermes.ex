@@ -26,12 +26,16 @@ defmodule Hermes do
     end
 
     # untested function
-    def get_password_hash_and_salt(p, username) do
+    def get_user_credentials(p, username) do
         {s, r} = Mariaex.query(p, "SELECT password_hash, salt FROM UserManagement WHERE username = ?", [username])
         case {s, r} do
             {:ok, _} ->
-                {:ok, r.rows, 0}
-            {:error, _} -> {:error, r.mariadb.message, 1}
+                if r.rows == [] do
+                    {:nix, "user does not exists"}
+                else
+                    {:ok, r.rows}
+                end
+            {:error, _} -> {:error, r.mariadb.message}
         end
     end
 
@@ -41,13 +45,6 @@ defmodule Hermes do
                 insert_user(p, username, email, passwordHash, salt)
                 create_user_profile(p, username)
             {:error, message} -> {:error, message}
-        end
-    end
-
-    def login_user(p, username) do
-        case does_user_not_exists(p, username) do
-            {:ok, _} -> {:ok, "User logged in"}
-            {:error, r} -> {:error, r.mariadb.message}
         end
     end
 

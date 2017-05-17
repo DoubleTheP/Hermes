@@ -3,8 +3,8 @@ defmodule Hermes do
 
 # IDEAS: add function to delete user from all databases
 
-    def start() do
-        Mariaex.start_link(username: "ecto", database: "mousika")
+    def start(username) do
+        Mariaex.start_link(username: username, database: "mousika")
     end
 
 # Access UserManagement-DB

@@ -17,8 +17,8 @@ defmodule Hermes do
         end
     end
 
-    defp insert_user(p, username, email, passwordHash, salt) do
-        {s, r} = Mariaex.query(p, "INSERT INTO UserManagement VALUES(?,?,?,?)", [username, email, passwordHash, salt])
+    defp insert_user(p, username, email, passwordHash) do
+        {s, r} = Mariaex.query(p, "INSERT INTO UserManagement VALUES(?,?,?)", [username, email, passwordHash])
         case {s, r} do
             {:ok, _} -> {:ok, "User inserted"}
             {:error, _} -> {:error, r.mariadb.message}
@@ -26,7 +26,7 @@ defmodule Hermes do
     end
 
     def get_user_credentials(p, username) do
-        {s, r} = Mariaex.query(p, "SELECT password_hash, salt FROM UserManagement WHERE username = ?", [username])
+        {s, r} = Mariaex.query(p, "SELECT password_hash FROM UserManagement WHERE username = ?", [username])
         case {s, r} do
             {:ok, _} ->
                 if r.rows == [] do
@@ -38,20 +38,20 @@ defmodule Hermes do
         end
     end
 
-    def create_user(p, username, email, passwordHash, salt) do
+    def create_user(p, username, email, passwordHash) do
         case does_user_not_exists(p, username) do
             {:ok, _} ->
-                insert_user(p, username, email, passwordHash, salt)
+                insert_user(p, username, email, passwordHash)
                 create_user_profile(p, username)
             {:error, message} -> {:error, message}
         end
     end
 
-    def update_password(p, username, newPassword, newSalt) do
+    def update_password(p, username, newPassword) do
         case does_user_not_exists(p, username) do
             {:ok, r} -> {:error, r.mariadb.message}
             {:error, _} ->
-                {s, r} = Mariaex.query(p, "UPDATE UserManagement SET password_hash = ?, salt = ? WHERE username = ?", [newPassword, newSalt, username])
+                {s, r} = Mariaex.query(p, "UPDATE UserManagement SET password_hash = ? WHERE username = ?", [newPassword, username])
                 case {s, r} do
                     {:ok, _} -> {:ok, "password successfully changed"}
                     {:error, _} -> {:error, r.mariadb.message}

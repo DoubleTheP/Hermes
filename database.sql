@@ -3,8 +3,7 @@ CREATE DATABASE IF NOT EXISTS mousika DEFAULT CHARACTER SET utf8 COLLATE utf8_un
 CREATE TABLE IF NOT EXISTS mousika.UserManagement (
     username VARCHAR(40) NOT NULL PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    salt VARCHAR(255) NOT NULL    
+    password_hash VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS mousika.UserProfiles (
@@ -35,3 +34,6 @@ CREATE TABLE IF NOT EXISTS mousika.Records (
     record_date INT NOT NULL DEFAULT 0,
     attempts INT NOT NULL DEFAULT 0
 );
+
+INSERT INTO UserManagement VALUES('username','email','passwordhash');
+INSERT INTO UserProfiles(username) VALUES('username');

@@ -8,15 +8,15 @@ defmodule HermesTest do
 
     test "Create User" do
         {:ok, p} = Hermes.start()
-        {_, m} = Hermes.create_user(p, "username1", "email1", "passwordHash1", "salt1")
-        {_, m} = Hermes.create_user(p, "username2", "email2", "passwordHash2", "salt2")
+        {_, m} = Hermes.create_user(p, "username1", "email1", "passwordHash1")
+        {_, m} = Hermes.create_user(p, "username2", "email2", "passwordHash2")
         # IO.puts m
     end
 
     test "Update Password" do
         {:ok, p} = Hermes.start()
-        {_, m} = Hermes.update_password(p, "username1", "newPassword1", "newSalt1")
-        {_, m} = Hermes.update_password(p, "username2", "newPassword2", "newSalt2")
+        {_, m} = Hermes.update_password(p, "username1", "newPassword1")
+        {_, m} = Hermes.update_password(p, "username2", "newPassword2")
         # IO.puts m
     end
 
